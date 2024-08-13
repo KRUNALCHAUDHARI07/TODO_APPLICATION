@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Request, Response, NextFunction, Router, RequestHandler } from "express";
 import Controller from "../interfaces/controller.interface";
 import validationMiddleware from "../middleware/validation.middleware";
 import CreateUserDto from "../dto/user.dto";
@@ -7,23 +7,28 @@ import AuthenticationService from "../service/authentication.service";
 import authMiddleware from '../middleware/userAuth.middleware';
 import RequestWithUser from '../interfaces/requestWithUser.interface';
 
+
 class AuthController implements Controller {
     public path = "/auth";
     public router = Router();
     public authenticationService = new AuthenticationService();
+
     constructor() {
         this.router.post(
             `${this.path}/register`,
             validationMiddleware(CreateUserDto),
-            this.registration
+            this.registration as RequestHandler // Casting to RequestHandler
         );
         this.router.post(
             `${this.path}/login`,
             validationMiddleware(LogInDto),
-            this.loggingIn
+            this.loggingIn as RequestHandler // Casting to RequestHandler
         );
-        this.router.get(`${this.path}/profile`, authMiddleware, this.getUserById);
-
+        this.router.get(
+            `${this.path}/profile`,
+            authMiddleware as RequestHandler, // Casting to RequestHandler
+            this.getUserById as RequestHandler // Casting to RequestHandler
+        );
     }
 
     private registration = async (

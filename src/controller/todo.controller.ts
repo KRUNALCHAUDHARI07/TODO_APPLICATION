@@ -1,8 +1,7 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Request, Response, NextFunction, Router, RequestHandler } from "express";
 import Controller from "../interfaces/controller.interface";
 import validationMiddleware from "../middleware/validation.middleware";
 import CreateTodoDto from "../dto/todo.dto";
-import LogInDto from "../dto/login.dto";
 import TodoService from "../service/todo.service";
 import authMiddleware from '../middleware/userAuth.middleware';
 import RequestWithUser from '../interfaces/requestWithUser.interface';
@@ -15,26 +14,26 @@ class TodoController implements Controller {
     constructor() {
         this.router.post(
             `${this.path}/create`,
-            authMiddleware,
+            authMiddleware as RequestHandler,
             validationMiddleware(CreateTodoDto),
-            this.create
+            this.create as RequestHandler
         );
         this.router.get(
             `${this.path}/get`,
-            authMiddleware,
-            this.get
+            authMiddleware as RequestHandler,
+            this.get as RequestHandler
         );
 
         this.router.post(
             `${this.path}/update`,
-            authMiddleware,
-            this.update
+            authMiddleware as RequestHandler,
+            this.update as RequestHandler
         );
 
         this.router.delete(
             `${this.path}/delete/:id`,
-            authMiddleware,
-            this.delete
+            authMiddleware as RequestHandler,
+            this.delete as RequestHandler
         );
 
     }
