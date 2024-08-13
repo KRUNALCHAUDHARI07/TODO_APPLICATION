@@ -7,6 +7,8 @@ import { Server as SocketIOServer } from 'socket.io'; // Import Socket.io Server
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
 import CheckUser from 'helper/checkUser.helper';
+import { Server, Socket } from "socket.io";
+import Todo from 'interfaces/todoModel.interface';
 
 class App {
   public app: express.Application;
@@ -52,7 +54,7 @@ class App {
   }
 
   private initializeSocketIO() {
-    this.io.on('connection', (socket) => {
+    this.io.on('connection', (socket: Socket) => {
       console.log('A user connected');
 
       socket.on('joinRoom', async (userId: string) => {
@@ -65,7 +67,7 @@ class App {
         }
       })
 
-      socket.on('addTask', (task) => {
+      socket.on('addTask', (task: Todo) => {
         //get task data from client and socket send task details and client add task in list
         socket.to(task.userId).emit('getTask', task);
       })
@@ -75,7 +77,7 @@ class App {
       });
 
       // Handle custom events
-      socket.on('message', (data) => {
+      socket.on('message', (data: any) => {
         console.log('Message received:', data);
         socket.emit('response', 'Message received');
       });

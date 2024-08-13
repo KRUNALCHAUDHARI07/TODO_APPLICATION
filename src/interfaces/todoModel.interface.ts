@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 interface Todo {
     _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
+    name: string;
+    description: string;
+    userId: string;
     isDeleted?: boolean;
     isActive?: boolean;
     createdAt?: Number,
